@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘의 명언</title>
+    <style>
+        /* CSS 스타일 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f06292, #fcb69f);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .quote-container {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            width: 100%;
+            backdrop-filter: blur(5px);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        #quote-text {
+            font-size: 1.8em;
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        #quote-author {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+        .loading {
+            font-size: 1.5em;
+            color: #e0e0e0;
+        }
+        .error {
+            color: #ffdddd;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="quote-container">
+        <h1>오늘의 명언</h1>
+        <div id="quote-content">
+            <p class="loading">명언을 불러오는 중...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', getQuoteOfTheDay);
+
+        async function getQuoteOfTheDay() {
+            const quoteContentDiv = document.getElementById('quote-content');
+            quoteContentDiv.innerHTML = '<p class="loading">명언을 불러오는 중...</p>';
+
+            try {
+                const response = await fetch('https://quotes.rest/qod?category=inspire');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP 오류 발생! 상태 코드: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data && data.contents && data.contents.quotes && data.contents.quotes.length > 0) {
+                    const quote = data.contents.quotes[0];
+                    quoteContentDiv.innerHTML = `
+                        <p id="quote-text">"${quote.quote}"</p>
+                        <p id="quote-author">- ${quote.author} -</p>
+                    `;
+                } else {
+                    throw new Error('API 응답에서 명언 데이터를 찾을 수 없습니다.');
+                }
+
+            } catch (error) {
+                console.error('명언을 가져오는 중 오류 발생:', error);
+                quoteContentDiv.innerHTML = `<p class="error">명언을 가져오는 데 실패했습니다.<br>다시 시도해 주세요. (${error.message})</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
