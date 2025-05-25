@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘의 명언</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>오늘의 명언</h1>
+        <div id="quoteDisplay">
+            <p>명언을 불러오는 중...</p>
+        </div>
+        <button id="getQuoteBtn">다른 명언 보기</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
