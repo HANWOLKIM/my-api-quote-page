@@ -2,8 +2,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const quoteDisplayDiv = document.getElementById('quoteDisplay');
     const getQuoteBtn = document.getElementById('getQuoteBtn');
 
-    // 새로운 명언 API 주소 (type.fit API - 무료, 키 없이, CORS 문제 적음)
+    // CORS 프록시 주소
+    const CORS_PROXY_URL = 'https://corsproxy.io/?';
+
+    // 명언 API 주소 (type.fit API)
     const API_URL = 'https://type.fit/api/quotes';
+
+    // CORS 프록시를 통해 API 호출할 최종 URL
+    const FINAL_API_URL = CORS_PROXY_URL + encodeURIComponent(API_URL);
+    // encodeURIComponent는 API_URL을 URL 안전한 문자열로 변환합니다.
 
     async function fetchQuote() {
         quoteDisplayDiv.innerHTML = '<p class="loading">명언을 불러오는 중...</p>';
@@ -11,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         quoteDisplayDiv.classList.remove('error');
 
         try {
-            const response = await fetch(API_URL);
+            // 프록시를 통해 API 호출
+            const response = await fetch(FINAL_API_URL);
             
             if (!response.ok) {
                 throw new Error(`API 요청 실패: ${response.status} ${response.statusText}`);
